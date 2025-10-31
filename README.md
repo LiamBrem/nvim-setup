@@ -1,10 +1,6 @@
----
-
 # Neovim Shortcut Cheat Sheet
 
 > *All leader key mappings assume `leader = <Space>`.*
-
----
 
 ## General UI / Appearance
 
