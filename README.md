@@ -48,6 +48,7 @@
 | Rename symbol       | `<leader>rn`  | Rename all references to symbol                             |
 | Code actions        | `<leader>ca`  | Run context-aware LSP actions (e.g., fix imports, refactor) |
 | Format file         | `<leader>f`   | Format the current buffer asynchronously                    |
+| See LSP Error       | `<leader>e`   | Opens up window to view line error                          |
 | Auto-format on save | *(automatic)* | Formats buffer before save (via `BufWritePre`)              |
 
 ---

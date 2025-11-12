@@ -88,6 +88,7 @@ local plugins = {
 			})
 
 			-- LSP config
+			local lspconfig = require("lspconfig")
 
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -141,6 +142,18 @@ local plugins = {
 				filetypes = { "java" },
 				on_attach = on_attach,
 				capabilities = capabilities,
+				root_dir = function(fname)
+					return lspconfig.util.root_pattern(
+						"build.gradle",
+						"build.gradle.kts",
+						"pom.xml",
+						"settings.gradle",
+						"settings.gradle.kts",
+						"mvnw",
+						"gradlew",
+						".git"
+					)(fname) or vim.fn.getcwd()
+				end,
 			})
 
 			vim.lsp.enable({ "lua_ls", "pyright", "clangd", "gopls", "jdtls" })
