@@ -23,7 +23,8 @@ local plugins = {
 			vim.cmd.colorscheme("rose-pine")
 			vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 			vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-			vim.opt.number = true -- For absolute line numbers
+			vim.wo.number = true
+			vim.wo.relativenumber = true -- For absolute line numbers
 		end,
 	},
 
@@ -43,6 +44,9 @@ local plugins = {
 				highlight = {
 					enable = true,
 					additional_vim_regex_highlighting = false,
+				},
+				indent = {
+					enable = false,
 				},
 			})
 		end,
