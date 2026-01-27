@@ -141,26 +141,7 @@ local plugins = {
 				capabilities = capabilities,
 			})
 
-			vim.lsp.config("jdtls", {
-				cmd = { "jdtls" },
-				filetypes = { "java" },
-				on_attach = on_attach,
-				capabilities = capabilities,
-				root_dir = function(fname)
-					return lspconfig.util.root_pattern(
-						"build.gradle",
-						"build.gradle.kts",
-						"pom.xml",
-						"settings.gradle",
-						"settings.gradle.kts",
-						"mvnw",
-						"gradlew",
-						".git"
-					)(fname) or vim.fn.getcwd()
-				end,
-			})
-
-			vim.lsp.enable({ "lua_ls", "pyright", "clangd", "gopls", "jdtls" })
+			vim.lsp.enable({ "lua_ls", "pyright", "clangd", "gopls" })
 		end,
 	},
 
@@ -226,6 +207,7 @@ local plugins = {
 		end,
 	},
 
+	-- harpoon
 	{
 		"ThePrimeagen/harpoon",
 		branch = "harpoon2",
@@ -266,6 +248,11 @@ local plugins = {
 				harpoon:list():next()
 			end)
 		end,
+	},
+
+	{
+		"mfussenegger/nvim-jdtls",
+		ft = { "java" },
 	},
 }
 
