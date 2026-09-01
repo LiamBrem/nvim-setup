@@ -20,6 +20,8 @@ return {
 					"clangd",
 					"gopls",
 					"lua_ls",
+					"ts_ls",
+					"eslint",
 				},
 			})
 
@@ -70,7 +72,41 @@ return {
 				capabilities = capabilities,
 			})
 
-			vim.lsp.enable({ "lua_ls", "pyright", "clangd", "gopls" })
+			vim.lsp.config("ts_ls", {
+				cmd = { "typescript-language-server", "--stdio" },
+				filetypes = {
+					"javascript",
+					"javascriptreact",
+					"javascript.jsx",
+					"typescript",
+					"typescriptreact",
+					"typescript.tsx",
+				},
+				on_attach = on_attach,
+				capabilities = capabilities,
+			})
+
+			vim.lsp.config("eslint", {
+				cmd = { "vscode-eslint-language-server", "--stdio" },
+				filetypes = {
+					"javascript",
+					"javascriptreact",
+					"javascript.jsx",
+					"typescript",
+					"typescriptreact",
+					"typescript.tsx",
+				},
+				on_attach = function(client, bufnr)
+					on_attach(client, bufnr)
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						buffer = bufnr,
+						command = "EslintFixAll",
+					})
+				end,
+				capabilities = capabilities,
+			})
+
+			vim.lsp.enable({ "lua_ls", "pyright", "clangd", "gopls", "ts_ls", "eslint" })
 		end,
 	},
 

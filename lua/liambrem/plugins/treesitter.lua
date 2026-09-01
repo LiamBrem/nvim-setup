@@ -2,23 +2,18 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
+		branch = "main",
+		lazy = false,
 		build = ":TSUpdate",
 		config = function()
-			require("nvim-treesitter.configs").setup({
-				-- A list of parser names, or "all"
-				ensure_installed = { "c", "lua", "markdown", "markdown_inline", "cpp", "python", "rust", "java" },
+			local parsers = { "c", "lua", "markdown", "markdown_inline", "cpp", "python", "rust", "java" }
+			require("nvim-treesitter").install(parsers)
 
-				sync_install = false,
-				auto_install = true,
-				ignore_install = { "javascript" },
-
-				highlight = {
-					enable = true,
-					additional_vim_regex_highlighting = false,
-				},
-				indent = {
-					enable = false,
-				},
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "c", "lua", "markdown", "cpp", "python", "rust", "java" },
+				callback = function()
+					vim.treesitter.start()
+				end,
 			})
 		end,
 	},
