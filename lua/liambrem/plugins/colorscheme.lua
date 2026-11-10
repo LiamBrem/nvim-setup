@@ -1,14 +1,13 @@
--- rose-pine
+-- catppuccin
 return {
-    "rose-pine/neovim",
-    name = "rose-pine",
+    "catppuccin/nvim",
+    name = "catppuccin",
     config = function()
-        require("rose-pine").setup({
-            styles = {
-                transparency = true,
-            },
+        require("catppuccin").setup({
+            flavour = "mocha",
+            transparent_background = true,
         })
-        vim.cmd.colorscheme("rose-pine")
+        vim.cmd.colorscheme("catppuccin-mocha")
         vim.wo.number = true
         vim.wo.relativenumber = true
     end,

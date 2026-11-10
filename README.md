@@ -1,117 +1,105 @@
-# Neovim Shortcut Cheat Sheet
+# Neovim configuration
 
-> *All leader key mappings assume `leader = <Space>`.*
+Personal Neovim setup managed with `lazy.nvim`. Plugin specs live in
+`lua/liambrem/plugins/`. The leader key is `<Space>`.
 
-## General UI / Appearance
+## Files and navigation
 
-| Action                 | Shortcut      | Description                                   |
-| :--------------------- | :------------ | :-------------------------------------------- |
-| Toggle line numbers    | *(automatic)* | Absolute line numbers enabled                 |
-| Transparent background | *(automatic)* | `Normal` and `NormalFloat` have no background |
+| Action | Key |
+| --- | --- |
+| Open the built-in file explorer | `<leader>pv` |
+| Find files with Telescope | `<leader>pf` |
+| Find Git-tracked files with Telescope | `<C-p>` |
+| Search for a prompted string with Telescope | `<leader>ps` |
+| Jump to visible text with Flash | `s` in normal, visual, or operator-pending mode |
 
----
+Flash replaces Vim's normal-mode `s` (substitute) mapping.
 
-## Telescope (File Finder & Search)
+### Harpoon
 
-| Action                 | Shortcut     | Description                           |
-| :--------------------- | :----------- | :------------------------------------ |
-| Find files             | `<leader>pf` | Open Telescope file finder            |
-| Find git-tracked files | `<C-p>`      | Search files tracked by Git           |
-| Search text (grep)     | `<leader>ps` | Grep for user-input string in project |
+| Action | Key |
+| --- | --- |
+| Add the current file | `<leader>a` |
+| Toggle the quick menu | `<C-e>` |
+| Open marked files 1–4 | `<C-h>`, `<C-t>`, `<C-n>`, `<C-s>` |
+| Previous or next marked file | `<C-S-P>`, `<C-S-N>` |
 
----
+## Git and diagnostics
 
-## Harpoon (Quick Navigation)
+| Action | Command or key |
+| --- | --- |
+| Review working-tree and staged changes | `:DiffviewOpen` |
+| Compare with a revision | `:DiffviewOpen <revision>` |
+| View history for the current file | `:DiffviewFileHistory %` |
+| Close Diffview | `:DiffviewClose` |
+| Show diagnostics in Trouble | `<leader>xx` |
+| Show the quickfix list in Trouble | `<leader>xq` |
+| Show a floating diagnostic | `<leader>e` |
 
-| Action                      | Shortcut    | Description                                        |
-| :-------------------------- | :---------- | :------------------------------------------------- |
-| Add current file to Harpoon | `<leader>a` | Adds file to Harpoon list (prints file name added) |
-| Toggle Harpoon menu         | `<C-e>`     | Opens Harpoon quick menu                           |
-| Jump to Harpoon file 1      | `<C-h>`     | Navigate to first Harpoon entry                    |
-| Jump to Harpoon file 2      | `<C-t>`     | Navigate to second Harpoon entry                   |
-| Jump to Harpoon file 3      | `<C-n>`     | Navigate to third Harpoon entry                    |
-| Jump to Harpoon file 4      | `<C-s>`     | Navigate to fourth Harpoon entry                   |
-| Previous Harpoon buffer     | `<C-S-P>`   | Jump to previous file in list                      |
-| Next Harpoon buffer         | `<C-S-N>`   | Jump to next file in list                          |
+Gitsigns marks added, changed, and deleted lines. Its hunk actions are available
+through `:Gitsigns`, but this config does not assign them keys.
 
----
+## LSP and editing
 
-## LSP (Language Server Protocol)
+The shared LSP mappings below are set when `lua_ls`, `pyright`, `clangd`,
+`gopls`, `ts_ls`, or `eslint` attaches. Java uses `nvim-jdtls` through
+`ftplugin/java.lua` and currently maps only `<leader>f` there.
 
-> Applies to all installed LSP servers (`lua_ls`, `pyright`, `clangd`, `jdtls`, etc.)
+| Action | Key |
+| --- | --- |
+| Hover documentation | `K` |
+| Go to definition | `gd` |
+| List references | `gr` |
+| Rename symbol | `<leader>rn` |
+| Format the current buffer asynchronously | `<leader>f` |
 
-| Action              | Shortcut      | Description                                                 |
-| :------------------ | :------------ | :---------------------------------------------------------- |
-| Hover info          | `K`           | Show documentation for symbol under cursor                  |
-| Go to definition    | `gd`          | Jump to symbol definition                                   |
-| Find references     | `gr`          | Show all references using Telescope                         |
-| Rename symbol       | `<leader>rn`  | Rename all references to symbol                             |
-| Code actions        | `<leader>ca`  | Run context-aware LSP actions (e.g., fix imports, refactor) |
-| Format file         | `<leader>f`   | Format the current buffer asynchronously                    |
-| See LSP Error       | `<leader>e`   | Opens up window to view line error                          |
-| Auto-format on save | *(automatic)* | Formats buffer before save (via `BufWritePre`)              |
+There is no general format-on-save behavior. The ESLint configuration runs
+`EslintFixAll` before saving buffers to which its server attaches.
 
----
+### Completion and text objects
 
-## Autocompletion (`nvim-cmp`)
+| Action | Key |
+| --- | --- |
+| Open completion menu | `<C-Space>` |
+| Accept selected completion | `<CR>` |
+| Next completion or snippet field | `<Tab>` |
+| Previous completion or snippet field | `<S-Tab>` |
+| Scroll completion documentation | `<C-b>`, `<C-f>` |
 
-| Action                   | Shortcut    | Description                                        |
-| :----------------------- | :---------- | :------------------------------------------------- |
-| Show completion menu     | `<C-Space>` | Manually trigger autocomplete                      |
-| Confirm completion       | `<CR>`      | Accept current completion                          |
-| Scroll docs up           | `<C-b>`     | Scroll up completion documentation                 |
-| Scroll docs down         | `<C-f>`     | Scroll down completion documentation               |
-| Next completion item     | `<Tab>`     | Move forward through completion options            |
-| Previous completion item | `<S-Tab>`   | Move backward through completion options           |
-| Expand/jump snippet      | `<Tab>`     | Expand LuaSnip snippet or jump to next placeholder |
-| Jump backward in snippet | `<S-Tab>`   | Jump to previous snippet placeholder               |
+`mini.pairs` inserts matching brackets and quotes. `mini.ai` extends the `a`
+and `i` text objects; for example, `via` selects an argument and `vaf`
+selects a function call.
 
----
+## Appearance and installed plugins
 
-## Treesitter (Syntax Highlighting)
+Catppuccin Mocha uses a transparent background. Absolute and relative line
+numbers are enabled. Lualine shows the branch, diff, diagnostics, file, and
+cursor location; indent-blankline draws indentation guides.
 
-| Action           | Shortcut      | Description                                                                                     |
-| :--------------- | :------------ | :---------------------------------------------------------------------------------------------- |
-| *(none defined)* | *(automatic)* | Provides syntax-aware highlighting for: `c`, `cpp`, `lua`, `markdown`, `python`, `rust`, `java` |
+| Plugin | Purpose |
+| --- | --- |
+| `lazy.nvim` | Plugin manager |
+| `catppuccin` | Colorscheme |
+| `telescope.nvim` | File finding and text search |
+| `harpoon` | Marked-file navigation |
+| `flash.nvim` | On-screen jumps |
+| `diffview.nvim` | Git diffs and file history |
+| `gitsigns.nvim` | Git change markers and hunk commands |
+| `trouble.nvim` | Diagnostics and quickfix views |
+| `mason.nvim`, `mason-lspconfig.nvim`, `nvim-lspconfig` | Language servers |
+| `nvim-jdtls` | Java language server integration |
+| `nvim-cmp`, completion sources, `LuaSnip` | Completion and snippets |
+| `mini.ai`, `mini.pairs` | Text objects and automatic pairs |
+| `nvim-treesitter`, `nvim-treesitter-context` | Syntax highlighting and current code context |
+| `lualine.nvim`, `indent-blankline.nvim` | Status line and indentation guides |
 
----
+Tree-sitter parsers are installed for C, C++, Lua, Markdown, Python, Rust,
+and Java, with `markdown_inline` also installed. Highlighting is started for
+those language filetypes by the current config. The LSP setup additionally
+covers Go and JavaScript/TypeScript.
 
-## Mason (LSP/DAP/Linter/Formatter Manager)
+## Maintenance
 
-| Action                | Shortcut       | Description                                      |
-| :-------------------- | :------------- | :----------------------------------------------- |
-| Open Mason UI         | `:Mason`       | Manage language servers, formatters, and linters |
-| Update Mason registry | `:MasonUpdate` | Refresh available package metadata               |
-
----
-
-## Plugin Overview
-
-| Plugin                                                               | Purpose                                         |
-| :------------------------------------------------------------------- | :---------------------------------------------- |
-| **rose-pine**                                                        | Elegant colorscheme with transparent background |
-| **nvim-treesitter**                                                  | Modern syntax highlighting & parsing            |
-| **telescope.nvim**                                                   | Fuzzy finder for files, text, etc.              |
-| **mason.nvim**                                                       | Manage external tools like LSPs and formatters  |
-| **mason-lspconfig.nvim**                                             | Bridge between Mason and Neovim’s LSP config    |
-| **nvim-lspconfig**                                                   | Core LSP client configuration                   |
-| **nvim-cmp**                                                         | Autocompletion engine                           |
-| **cmp-nvim-lsp / cmp-buffer / cmp-path / cmp-cmdline / cmp-luasnip** | Completion sources                              |
-| **LuaSnip**                                                          | Snippet engine                                  |
-| **harpoon**                                                          | Quick file marking and navigation               |
-| **lazy.nvim**                                                        | Plugin manager (used to load all plugins)       |
-
----
-
-## Tips
-
-* Run `:LspInfo` to confirm your LSP is attached for the current file.
-* Run `:checkhealth` for diagnostics on plugin or LSP setup.
-* Press `<leader>f` anytime to format manually.
-* To update all plugins: `:Lazy update`
-* To clean unused plugins: `:Lazy clean`
-
----
-
-
-
+- `:Lazy` shows plugins; `:Lazy update` updates them.
+- `:Mason` manages language tools; `:MasonUpdate` refreshes its registry.
+- `:checkhealth` reports Neovim and plugin setup issues.
